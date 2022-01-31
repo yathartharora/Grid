@@ -9,7 +9,12 @@ import * as Yup from 'yup';
 const Login=({handleChange}) => {
 
     const onSubmit=(values, props) => {
-        console.log(values)
+
+        fetch("/login").then(res => {
+            if(res.ok){
+                console.log(res)
+            }
+        })
     }
 
     const paperStyle = {
@@ -27,7 +32,6 @@ const Login=({handleChange}) => {
         username: "",
         password: "",
         remember: false
-
     }
 
     const validationSchema = Yup.object().shape({

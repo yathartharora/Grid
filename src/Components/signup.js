@@ -1,5 +1,8 @@
 import React from 'react';
 import {Grid, Paper, Avatar, TextField, Button, Link, Typography} from '@material-ui/core';
+import {Formik, Form, Field, ErrorMessage} from 'formik';
+import axios from "axios";
+
 
 const Signup = () => {
 
@@ -17,6 +20,25 @@ const Signup = () => {
     const avatarStyle = {
         backgroundColor: 'green'
     }
+
+    const onSubmit = (values,props) => {
+
+        const newUser = {
+            name: values.name,
+            email: values.email,
+            pass: values.pass,
+            passconf: values.passconf
+        }
+        axios.post('http://localhost:3001/create', newUser)
+    }
+
+    const initialValues = {
+        name: "",
+        email: "",
+        pass: "",
+        passconf: ""
+    }
+
     return(
         <Grid>
             <Paper style={sign} elevation={20}>
@@ -24,16 +46,19 @@ const Signup = () => {
                 <Avatar style={avatarStyle}>G</Avatar>
                     <h2>Sign Up</h2>
                 </Grid>
-                <form>
-                <TextField fullWidth required label="Name"/>
-                <TextField fullWidth required label="Email"/>
-                <TextField fullWidth required label="Password" type="password"/>
-                <TextField fullWidth required label="Confirm Password" type="password"/>
-                <Button type="submit" variant="contained" color="primary" style={bt}>Sign Up</Button>
-                </form>
+                
+                    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+                        {(props) => (
+                            <Form>
+                                <Field as={TextField} fullWidth required label="Name" name="name"/>
+                                <Field as={TextField} fullWidth required label="Email" name="email"/>
+                                <Field as={TextField} fullWidth required label="Password" name="pass" type="password"/>
+                                <Field as={TextField} fullWidth required label="Confirm Password" name="passconf" type="password"/>
+                                <Button type="submit" variant="contained" color="primary" style={bt}>Sign Up</Button>
+                            </Form>
+                        )}
+                    </Formik>
             </Paper>
-            
-            
         </Grid>
     )
 }
